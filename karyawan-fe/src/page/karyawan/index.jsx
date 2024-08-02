@@ -2,9 +2,9 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import ImportModal from '../components/ImportModal';
-import KaryawanTable from '../components/KaryawanTable';
-import { API_URL } from '../utils/constant';
+import ImportModal from '../../components/ImportModal';
+import KaryawanTable from '../../components/KaryawanTable';
+import { API_URL } from '../../utils/constant';
 
 const DownloadExcel = async () => {
   try {
@@ -14,7 +14,7 @@ const DownloadExcel = async () => {
   }
 };
 
-const KaryawanPage = () => {
+const EmployeeIndex = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
@@ -76,4 +76,4 @@ const KaryawanPage = () => {
   );
 };
 
-export default KaryawanPage;
+export default EmployeeIndex;
