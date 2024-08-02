@@ -2,16 +2,18 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import EmployeeIndex from './page/karyawan';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Page from './page/karyawan';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import EmployeeCreatePage from './page/karyawan/create';
+import EmployeeIndexPage from './page/karyawan';
 
 function App() {
   return (
     <Router>
-      <Navbar />
-      <Switch>
-        <Route path='/karyawan' component={EmployeeIndex} />
-      </Switch>
+      <Routes>
+        <Route path='/karyawan' element={<EmployeeIndexPage />} />
+        <Route path='/karyawan/create' element={<EmployeeCreatePage />} />
+      </Routes>
     </Router>
   );
 }

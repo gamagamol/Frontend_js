@@ -8,7 +8,7 @@ const checkUrl = (url) => {
   const match = url.match(regex);
 
   if (!match) {
-    return `{"http://localhost:3000/uploads/url"}`;
+    return `http://localhost:3000/uploads/${url}`;
   } else {
     return url;
   }
