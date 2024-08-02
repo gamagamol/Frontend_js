@@ -1,0 +1,21 @@
+/** @format */
+
+.sidebar {
+  background-color: #363740;
+  color: #fff;
+  width: 200px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  background-color: #444;
+}
