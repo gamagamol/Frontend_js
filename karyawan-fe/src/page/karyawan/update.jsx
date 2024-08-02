@@ -1,15 +1,29 @@
 /** @format */
 
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { API_URL } from '../../utils/constant';
+const checkUrl = (url) => {
+  const regex = /^http|https/;
 
-const EmployeeCreatePage = () => {
+  const match = url.match(regex);
+
+  if (!match) {
+    return `http://localhost:3000/uploads/${url}`;
+  } else {
+    return url;
+  }
+};
+
+const EmployeeUpdatePage = () => {
+  const { id } = useParams();
+
+  const [previewFoto, setPreviewFoto] = useState();
   const {
     register,
     handleSubmit,
@@ -20,28 +34,41 @@ const EmployeeCreatePage = () => {
       foto: null,
     },
   });
-  const [previewFoto, setPreviewFoto] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(API_URL + `/${id}`);
+      setValue('nama', response.data.nama);
+      setValue('nomor', response.data.nomor);
+      setValue('jabatan', response.data.jabatan);
+      setValue('department', response.data.department);
+      setValue('status', response.data.status);
+      setPreviewFoto(checkUrl(response.data.foto));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
 
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
       for (const key in data) {
-        if (key === 'foto') {
-          formData.append(key, data[key], data[key].name);
-        } else {
+        if (data[key] != null) {
           formData.append(key, data[key]);
         }
       }
 
-      formData.append('tanggal_masuk', new Date().toISOString().split('T')[0]);
-
-      const response = await axios.post(API_URL, formData, {
+      const response = await axios.patch(API_URL+`/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      toast.success('Data karyawan berhasil ditambahkan!', {
+      toast.success('Data karyawan berhasil di updated!', {
         position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
@@ -50,8 +77,8 @@ const EmployeeCreatePage = () => {
         draggable: true,
       });
 
-        setTimeout(() => {
-          window.location.href = '/karyawan';
+      setTimeout(() => {
+        window.location.href = '/karyawan';
       }, 3000);
     } catch (error) {
       console.error('Error:', error); // This is for debugging
@@ -157,6 +184,7 @@ const EmployeeCreatePage = () => {
                           maxHeight: '150px',
                           objectFit: 'cover',
                         }}
+                        id='profile-picture'
                       />
                     </div>
                   </Col>
@@ -179,4 +207,4 @@ const EmployeeCreatePage = () => {
   );
 };
 
-export default EmployeeCreatePage;
+export default EmployeeUpdatePage;

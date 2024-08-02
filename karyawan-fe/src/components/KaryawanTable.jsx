@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-
+import Toggle from './toggle';
 const checkUrl = (url) => {
   const regex = /^http|https/;
 
@@ -20,7 +20,7 @@ const DateSplit = (isoDateString) => {
   return dateOnly;
 };
 
-const KaryawanTable = (data) => {
+const KaryawanTable = ({ data, handleSetId, handleShowModalDelete }) => {
   return (
     <div className='card mt-3'>
       <div className='card-body'>
@@ -35,10 +35,11 @@ const KaryawanTable = (data) => {
                 <th>Tanggal Masuk</th>
                 <th>Photo</th>
                 <th>Status</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              {data.data.map((d) => {
+              {data.map((d) => {
                 let classBadge;
 
                 if (d.status == 'PROBATION') {
@@ -61,6 +62,9 @@ const KaryawanTable = (data) => {
                     <td>
                       <span className={classBadge}>{d.status}</span>
                     </td>
+                    <th>
+                      <Toggle id={d.id} handleSetId={handleSetId} handleShowModalDelete={handleShowModalDelete} />
+                    </th>
                   </tr>
                 );
               })}

@@ -3,6 +3,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import DeleteModal from '../../components/deleteModal';
 import ImportModal from '../../components/ImportModal';
 import KaryawanTable from '../../components/KaryawanTable';
 import { API_URL } from '../../utils/constant';
@@ -17,9 +19,47 @@ const DownloadExcel = async () => {
 
 const EmployeeIndexPage = () => {
   const [data, setData] = useState([]);
+  const [DataId, setId] = useState(0);
+
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
+
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const handleShowModalDelete = () => {
+    setShowModalDelete(true);
+  };
+  const handleCloseModalDelete = () => setShowModalDelete(false);
+
+  const handleSetId = (id) => {
+    setId(id);
+  };
+
+  const handleDeleted = (statusCode) => {
+    console.log(statusCode);
+    if (statusCode == 200) {
+      toast.success('Data karyawan berhasil di hapus!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setTimeout(() => {
+        fetchData();
+      }, 3000);
+    } else {
+      toast.error('Data karyawan berhasil di hapus!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -74,11 +114,12 @@ const EmployeeIndexPage = () => {
               </div>
             </div>
             <ImportModal show={showModal} handleClose={handleCloseModal} handleFileUpload={handleFileUpload} />
-
-            <KaryawanTable data={data} />
+            <DeleteModal showModalDelete={showModalDelete} handleCloseDelete={handleCloseModalDelete} id={DataId} handleDeleted={handleDeleted} />
+            <KaryawanTable data={data} handleSetId={handleSetId} handleShowModalDelete={handleShowModalDelete} />
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
